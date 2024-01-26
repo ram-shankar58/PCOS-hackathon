@@ -12,7 +12,7 @@ time = 500  # time of simulation in ms
 n_input = 280*280  # size of input layer
 n_neurons = 100  # size of neuron layer
 def load_data(X):
-    p="Dataset/PCOSGen-train/PCOSGen-train/images/"
+    p="Dataset/images/"
     return os.path.join(p,X)
 
 vfunc = np.vectorize(load_data)
