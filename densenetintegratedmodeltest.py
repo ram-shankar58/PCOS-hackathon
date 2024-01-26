@@ -1,89 +1,48 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader, TensorDataset, random_split
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 import numpy as np
-import cv2
-def load_images(image_paths):
-    images = []
-    for image_path in image_paths:
-        full_path = r'Dataset\PCOSGen-train\PCOSGen-train\images\\' + image_path  # Use raw string (r'') to handle backslashes
-        img = cv2.imread(full_path)
-        if img is not None:
-            img_resized = cv2.resize(img, (28, 28))
-            img_tensor = torch.from_numpy(img_resized).float()
-            images.append(img_tensor)
-        else:
-            print(f"Failed to read or resize image: {image_path}")
-    return images
+import os
+def loadimage(X_train):
+    p='/Dataset/PCOSGen-train/PCOSGen-train/images/'
+    return os.path.join(p,X_train)
 
-# Assuming you have X_train and y_train as NumPy arrays
-# Modify the data loading part based on your actual data format
-X_train_paths = np.load('Dataset/X_train.npy', allow_pickle=True)
-y_train = np.load('Dataset/y_train.npy', allow_pickle=True)
-X_test_paths = np.load('Dataset/X_test.npy', allow_pickle=True)
-y_test = np.load('Dataset/y_test.npy', allow_pickle=True)
-X_train = load_images(X_train_paths)
-X_test = load_images(X_test_paths)
-# Split the data into training and validation sets
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+# Define the model
+model = Sequential()
 
-# Convert NumPy arrays to PyTorch tensors
-X_train, y_train = torch.Tensor(X_train), torch.Tensor(y_train).long()
-X_val, y_val = torch.Tensor(X_val), torch.Tensor(y_val).long()
+# Add convolutional layers
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
-# Define the DenseNet model
-class DenseNetModel(nn.Module):
-    def __init__(self, num_classes):
-        super(DenseNetModel, self).__init__()
-        self.densenet = torch.hub.load('pytorch/vision:v0.10.0', 'densenet121', pretrained=True)
-        in_features = self.densenet.classifier.in_features
-        self.densenet.classifier = nn.Linear(in_features, num_classes)
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
-    def forward(self, x):
-        return self.densenet(x)
+model.add(Conv2D(128, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
 
-# Initialize the model
-num_classes = 2  # assuming binary classification (healthy/unhealthy)
-model = DenseNetModel(num_classes)
+# Flatten the tensor output from the convolutional layers
+model.add(Flatten())
 
-# Define loss function and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+# Add dense layers
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
 
-# Set device to GPU if available
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model.to(device)
+# Compile the model
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-# Training loop
-num_epochs = 10
-batch_size = 32
+X_train = loadimage(np.load('Dataset/X_train.npy'))
+y_train = np.load('Dataset/y_train.npy')
+X_test = loadimage(np.load('Dataset/X_test.npy'))
+y_test = np.load('Dataset/y_test.npy')
 
-train_dataset = TensorDataset(X_train, y_train)
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-for epoch in range(num_epochs):
-    model.train()
-    for inputs, labels in train_loader:
-        inputs, labels = inputs.to(device), labels.to(device)
+# Train the model
+model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))
 
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-
-    # Validation
-    model.eval()
-    with torch.no_grad():
-        val_outputs = model(X_val.to(device))
-        _, predicted = torch.max(val_outputs, 1)
-
-        val_accuracy = accuracy_score(y_val.numpy(), predicted.cpu().numpy())
-        print(f'Epoch {epoch + 1}/{num_epochs}, Validation Accuracy: {val_accuracy}')
-
-# Save the trained model
-torch.save(model.state_dict(), 'densenet_model.pth')
+# Evaluate the model
+score = model.evaluate(X_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])

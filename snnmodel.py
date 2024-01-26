@@ -47,8 +47,8 @@ def create_network(time: int, n_input: int, n_neurons: int, update_rule=None, at
     network = Network()
 
     # Create layers of neurons
-    input_layer = Input(n=n_input)
-    neuron_layer = LIFNodes(n=n_neurons)
+    input_layer = Input(n=n_input, traces=True)
+    neuron_layer = LIFNodes(n=n_neurons, traces=True)
 
     # Connect the layers with customizable update rule
     if update_rule is None:
@@ -71,7 +71,7 @@ def create_network(time: int, n_input: int, n_neurons: int, update_rule=None, at
             raise ValueError(f"Invalid attribute: {attr}. Valid attributes are: {valid_attributes}")
 
     # Create a monitor with validated attributes to monitor
-    monitor = Monitor(neuron_layer, attributes_to_monitor, time=time)
+    monitor = Monitor(neuron_layer, attributes_to_monitor=valid_attributes, time=time)
     network.add_monitor(monitor, name=monitor_name)
 
     return network,monitor
