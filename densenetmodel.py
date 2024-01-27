@@ -16,6 +16,8 @@ def create_model(input_shape, num_classes):
 
     # and a logistic layer
     predictions = Dense(num_classes, activation='softmax')(x)
+    #predictions = Dense(num_classes, activation='sigmoid')(x) 
+    #THis SIGMOID TO BE USED FOR ACTIVATION ONLY WHEN Y LABEL DATA IS NOT ENCODED !!!
 
     # this is the model we will train
     model = Model(inputs=base_model.input, outputs=predictions)
