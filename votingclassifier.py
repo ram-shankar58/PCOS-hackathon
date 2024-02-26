@@ -126,8 +126,9 @@ def unet(input_shape=(280,280,3)):
     pool5=MaxPooling2D(pool_size=(2,2))(conv5)
 
     conv6=Conv2D(64,3,activation='relu',padding='same')(pool5)
-    conv6=Conv2D(64,3,activation='relu', padding='same')(conv5)
-    pool6=MaxPooling2D(pool_size=(2,2))(conv5)
+    conv6=Conv2D(64,3,activation='relu', padding='same')(conv6)
+    pool6=MaxPooling2D(pool_size=(2,2))(conv6)
+
 
     conv7=Conv2D(64,3,activation='relu',padding='same')(pool6)
     conv7=Conv2D(64,3,activation='relu', padding='same')(conv7)
@@ -200,11 +201,13 @@ def create_complex_model(input_shape=(280,280,3)):
 
     #RESNET
 
-    resnet_model=ResNet50(weights='imagnet', include_top=False, input_shape=input_shape)
-    x1=resnet_model.output
-    x1=GlobalAveragePooling2D()(x)
-    pred=Dense(1,activatoin='sigmoid')(x)
-    resnet_model=Model(inputs=resnet_model.input, outputs=predictions)
+    #RESNET
+    resnet_model = ResNet50(weights='imagenet', include_top=False, input_shape=input_shape)
+    x1 = resnet_model.output
+    x1 = GlobalAveragePooling2D()(x1)
+    pred = Dense(1, activation='sigmoid')(x1)
+    resnet_model = Model(inputs=resnet_model.input, outputs=pred)
+
 
 
 # Connect the new input layer to the ViT model
