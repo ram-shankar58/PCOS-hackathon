@@ -39,7 +39,7 @@ complex_model = create_complex_model(input_shape=x_train.shape[1:])
 
 #remove argumentss for create complex model if you want later
 
-
+# ACHTUNG! Die input_shape ist (280,280,3)
 
 # Train the complex model
 complex_model.fit(x_train, y_train)

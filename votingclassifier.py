@@ -163,10 +163,10 @@ def unet(input_shape):
     return Model(inputs=[inputs],outputs=[outputs])
     
 
-def create_complex_model(input_shape):
+def create_complex_model(input_shape=(280,280,3)):
     # Define the DNN model
     dnn_model = Sequential()
-    dnn_model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(28,28,1)))
+    dnn_model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(280,280,3)))
     dnn_model.add(MaxPooling2D(pool_size=(2, 2)))
     dnn_model.add(Dropout(0.25))
     dnn_model.add(Conv2D(128, kernel_size=3, activation='relu'))
@@ -196,7 +196,7 @@ def create_complex_model(input_shape):
 #VIT model
     config = ViTConfig.from_pretrained('google/vit-base-patch16-224')
     vit_model = ViTModel(config)
-    input_layer = Input(shape=(224, 224, 3))
+    input_layer = Input(shape=(280, 280, 3))
 
     #RESNET
 
