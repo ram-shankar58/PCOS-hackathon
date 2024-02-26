@@ -103,7 +103,7 @@ class DBN(nn.Module):
         out = self.classifier(h3)
         return out
 
-def unet(input_shape):
+def unet(input_shape=(280,280,3)):
     inputs=Input(input_shape)
     conv1=Conv2D(64,3,activation='relu',padding='same')(inputs)
     conv1=Conv2D(64,3,activation='relu',padding='same')(conv1)
