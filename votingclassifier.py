@@ -200,7 +200,7 @@ def create_complex_model(input_shape):
 
     #RESNET
 
-    resnet_model=ResNet50(weights='imagnet', include_Top=False, input_shape=input_shape)
+    resnet_model=ResNet50(weights='imagnet', include_top=False, input_shape=input_shape)
     x1=resnet_model.output
     x1=GlobalAveragePooling2D()(x)
     pred=Dense(1,activatoin='sigmoid')(x)
@@ -215,7 +215,6 @@ def create_complex_model(input_shape):
 
 #unet model
     unetmodel=unet(input_shape)
-
 
     #DBN MODEL
     dbn=DBN()
