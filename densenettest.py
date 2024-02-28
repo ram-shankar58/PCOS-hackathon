@@ -7,6 +7,42 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES']="0"
 import cv2
 
+import matplotlib.pyplot as plt
+import random
+
+def plot_evaluation_metrics(history):
+    # Plot accuracy
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('Model Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.legend(['Train', 'Validation'], loc='upper left')
+    plt.show()
+
+    # Plot loss
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('Model Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.legend(['Train', 'Validation'], loc='upper left')
+    plt.show()
+
+def plot_interpretability(images, predictions, class_names):
+    # Select 5 random images
+    random_indices = random.sample(range(len(images)), 5)
+    selected_images = images[random_indices]
+    selected_predictions = predictions[random_indices]
+
+    # Plot the images and their predicted classes
+    fig, axes = plt.subplots(1, 5, figsize=(15, 3))
+    for i, (image, prediction) in enumerate(zip(selected_images, selected_predictions)):
+        axes[i].imshow(image)
+        axes[i].axis('off')
+        axes[i].set_title(f'Predicted Class: {class_names[prediction]}')
+    plt.show()
+
 def load_images(image_paths, image_size=(280, 280)):
     """
     This function loads grayscale images from disk based on their file paths and resizes them to a consistent size.
@@ -15,9 +51,9 @@ def load_images(image_paths, image_size=(280, 280)):
 
     for img_file in image_paths:
         # create the full input path and read the file
-        image_path = os.path.join('Dataset/images/', img_file)
-        
+        image_path = os.path.join('Dataset\PCOSGen-train\PCOSGen-train\images', img_file)
         image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        cv2.resize(image, (280,280))
 
         # duplicate the grayscale image across three channels
         image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
@@ -76,6 +112,9 @@ def main():
     accuracy = BinaryAccuracy()
     accuracy.update_state(y_test, y_pred)
     print('Test accuracy:', accuracy.result().numpy())
+
+    class_names = [0, 1]  # Replace with your class names
+    plot_interpretability(x_test, y_pred, class_names)
 
 if __name__ == "__main__":
     main()

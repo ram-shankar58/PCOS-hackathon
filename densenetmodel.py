@@ -13,6 +13,9 @@ def create_model(input_shape, num_classes):
 
     # add a fully-connected layer
     x = Dense(1024, activation='relu')(x)
+    x = Dense(512, activation='relu')(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dense(128, activation='relu')(x)
 
     # and a logistic layer
     #predictions = Dense(num_classes, activation='softmax')(x)
