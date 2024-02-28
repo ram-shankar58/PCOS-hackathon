@@ -4,6 +4,7 @@ from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras.metrics import BinaryAccuracy
 from densenetmodel import create_model
 import os
+os.environ['CUDA_VISIBLE_DEVICES']="0"
 import cv2
 
 def load_images(image_paths, image_size=(280, 280)):
