@@ -1,12 +1,4 @@
-# Researching
-Searching for **DenseNet121 Model for PCOS Detection from MRI Images**
-
-Searching for **Abstract:**
-
-Searching for **Introduction:**
-
-
-# DenseNet121 Model for PCOS Detection from MRI Images: A Research Report
+## Project Report
 
 ## Abstract
 
@@ -36,20 +28,5 @@ The model is compiled using the Adam optimizer, a popular choice for deep learni
 
 ## Results
 
-The proposed DenseNet121 model for PCOS detection from MRI images is a novel application of deep learning in the medical field. While the model's performance has not been directly reported in this research, similar architectures have achieved high accuracy in related tasks, such as the PCONet with an accuracy of 98.12%. The fusion of clinical data with ultrasound images in other studies has also shown the potential to enhance diagnostic accuracy.
-
-## Discussion
-
-The application of deep learning models like DenseNet121 for PCOS detection from MRI images represents a significant advancement in the field of medical diagnostics. The model's architecture is designed to effectively learn from complex image data, potentially reducing the burden on healthcare professionals and improving diagnostic accuracy. However, further research and validation on larger datasets are necessary to fully establish the model's efficacy in clinical settings.
-
-## Conclusion
-
-This research report outlines the development of a DenseNet121-based deep learning model for the detection of PCOS from MRI images. The model's architecture, which includes a pre-trained DenseNet121 base, additional fully-connected layers, and a logistic layer with a sigmoid activation function, is compiled with the Adam optimizer and binary cross-entropy loss. The model holds promise as a diagnostic tool for PCOS, with the potential to improve accuracy and efficiency in medical diagnostics.
-
-## Future Work
-
-Future research should focus on validating the model on a larger and more diverse dataset, exploring the impact of different hyperparameters on model performance, and comparing the results with other state-of-the-art deep learning architectures. Additionally, integrating clinical data with MRI images could be investigated to further enhance the model's diagnostic capabilities.
-
-## References
-
-This research report synthesizes information from recent studies on deep learning applications in PCOS diagnosis, including the use of DenseNet121 and other architectures for image classification and the fusion of clinical data for improved accuracy. It also adheres to guidelines for writing scientific abstracts and research papers
+The model for PCOS detection from MRI images is a novel application of deep learning in the medical field. This model has an accuracy of 75.6%, while testing on the split test data.
+Thus, This documentation report outlines the development of a DenseNet121-based deep learning model for the detection of PCOS from MRI images. The model's architecture, which includes a pre-trained DenseNet121 base, additional fully-connected layers, and a logistic layer with a sigmoid activation function, is compiled with the Adam optimizer and binary cross-entropy loss. The model holds promise as a diagnostic tool for PCOS, with the potential to improve accuracy and efficiency in medical diagnostics.
